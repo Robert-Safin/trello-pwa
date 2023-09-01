@@ -1,7 +1,7 @@
 "use client";
-
 import { useState } from "react";
 import { BsMoonStarsFill, BsFillSunFill } from "react-icons/bs";
+import Switch from "react-switch";
 
 const ThemeButton = () => {
   const [theme, setTheme] = useState("light");
@@ -19,7 +19,17 @@ const ThemeButton = () => {
   return (
     <div className="flex items-center justify-center space-x-8 bg-primary dark:bg-primaryDark rounded-md py-2">
       <BsFillSunFill className="w-6 h-6 text-textGray" />
-      <button onClick={changeTheme}>i/o</button>
+      <Switch
+        offColor="#5e379d"
+        onColor="#5e379d"
+        handleDiameter={15}
+        height={20}
+        width={40}
+        uncheckedIcon={false}
+        checkedIcon={false}
+        checked={theme === "light" ? false : true}
+        onChange={changeTheme}
+      />
 
       <BsMoonStarsFill className="w-4 h-4 text-textGray" />
     </div>

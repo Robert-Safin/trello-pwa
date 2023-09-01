@@ -11,11 +11,8 @@ const useUpdateStore = () => {
   const store = useReadStore();
   const dispatch = useDispatch();
 
-  const updateData = (newData: RootAction) => {
-    dispatch({
-      type: 'YOUR_ACTION_TYPE',
-      payload: newData,
-    });
+  const updateData = (action: RootAction) => {
+    dispatch(action);
   };
 
   return {

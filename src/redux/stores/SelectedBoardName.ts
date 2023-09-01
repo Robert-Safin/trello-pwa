@@ -8,7 +8,7 @@ type SelectedBoardNameState = {
 };
 
 const initialState: SelectedBoardNameState = {
-  selectedBoardName: 'Please select a board',
+  selectedBoardName: 'Select Board',
 };
 
 const selectedBoardName = createSlice({

@@ -11,7 +11,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="h-screen w-full bg-primary dark:bg-primaryDark">
+      <body id="root" className="min-h-screen min-w-full max-h-screen max-w-full bg-primary dark:bg-primaryDark">
         <Provider store={store}>
           <PersistGate persistor={persistor}>{children}</PersistGate>
         </Provider>

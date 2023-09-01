@@ -7,7 +7,7 @@
 
 @layer components {
   .header {
-    @apply text-base text-black dark:text-white
+    @apply text-base text-black dark:text-white hover:text-action
   }
 }
 
@@ -20,7 +20,7 @@
 
 @layer components {
   .text {
-    @apply text-sm text-black dark:text-white
+    @apply text-sm text-black dark:text-white hover:text-action
   }
 }
 
@@ -35,6 +35,32 @@
 
 @layer components {
   .btn {
-    @apply bg-action text-white rounded-3xl p-3 px-4 text-sm
+    @apply bg-action text-white rounded-3xl p-2 px-6 text-sm
+  }
+}
+
+@layer components {
+  .btnWhite {
+    @apply bg-textGray dark:bg-white text-white dark:text-action rounded-3xl p-2 px-6 text-sm
+  }
+}
+
+
+@layer components {
+  .input {
+    @apply bg-secondary dark:bg-secondaryDark border border-textGray rounded-md p-2 my-1 text-textGray
+  }
+}
+
+
+@layer components {
+  .tabActive {
+    @apply flex items-center bg-action py-2 pl-4 text-white rounded-r-2xl mr-8
+  }
+}
+
+@layer components {
+  .tabInactive {
+    @apply flex items-center py-2 pl-4 text-textGray
   }
 }
