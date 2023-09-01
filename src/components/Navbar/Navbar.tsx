@@ -8,17 +8,21 @@ import Modal from "react-modal";
 import ThemeButton from "../ThemeButton/ThemeButton";
 import { BsClipboard2 } from "react-icons/bs";
 import { RiDeleteBack2Line } from "react-icons/ri";
-import { Column, addBoard } from "@/redux/stores/boardStore";
+import { Column, addBoard, deleteBoard } from "@/redux/stores/boardStore";
 import SelectedBoardName, {
+  initialState,
+  resetToDefault,
   updateSelectedBoardName,
 } from "@/redux/stores/SelectedBoardName";
 import { showModal } from "@/redux/stores/showAddNewBoard";
+import { modalIsOpen as modalIsOpenStore } from "@/redux/stores/editBoard";
 
 Modal.setAppElement("#root");
 
 const Navbar = () => {
   const { store, updateData } = useUpdateStore();
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [options, setOptions] = useState(false);
 
   return (
     <>
@@ -41,7 +45,24 @@ const Navbar = () => {
             + Add New Task
           </button>
           <button className="btn md:hidden absolute top-6 right-10">+</button>
-          <BsThreeDotsVertical className="text-3xl text-textGray mx-2 absolute top-7 right-0" />
+          <BsThreeDotsVertical
+            onClick={() => {
+              setOptions(true);
+              setTimeout(() => {
+                setOptions(false);
+              }, 4000);
+            }}
+            className="text-3xl text-textGray mx-2 absolute top-7 right-0"
+          />
+          {options && (
+            <div className="absolute top-16 right-2 w-32 h-20 rounded-md p-4 flex flex-col justify-between bg-secondary dark:bg-secondaryDark">
+              <h1 className="text-sm text-textGray" onClick={()=> updateData(modalIsOpenStore(true))}>Edit Board</h1>
+              <h1 className="text-sm text-delete" onClick={()=> {
+                updateData(deleteBoard(store.selectedBoardName.selectedBoardName))
+                updateData(resetToDefault())
+              }}>Delete Board</h1>
+            </div>
+          )}
         </div>
       </div>
 

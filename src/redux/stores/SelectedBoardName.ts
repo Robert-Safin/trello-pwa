@@ -7,7 +7,7 @@ type SelectedBoardNameState = {
   selectedBoardName: string;
 };
 
-const initialState: SelectedBoardNameState = {
+export const initialState: SelectedBoardNameState = {
   selectedBoardName: 'Select Board',
 };
 
@@ -18,9 +18,12 @@ const selectedBoardName = createSlice({
     updateSelectedBoardName: (state, action: PayloadAction<string>) => {
       state.selectedBoardName = action.payload;
     },
+    resetToDefault: (state) => {
+      state.selectedBoardName = initialState.selectedBoardName;
+    },
   },
 });
 
-export const { updateSelectedBoardName } = selectedBoardName.actions;
+export const { updateSelectedBoardName,resetToDefault } = selectedBoardName.actions;
 
 export default selectedBoardName.reducer;

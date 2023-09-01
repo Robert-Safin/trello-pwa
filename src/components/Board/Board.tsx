@@ -1,23 +1,36 @@
 "use client";
 import useUpdateStore from "@/app/lib/useUpdateStore";
-import { updateBoard } from "@/redux/stores/boardStore";
+import { Task, updateBoard } from "@/redux/stores/boardStore";
 import { modalIsOpen } from "@/redux/stores/editBoard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiDeleteBack2Line } from "react-icons/ri";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
-
+interface Column {
+  columnName: string;
+  tasks: Task[]; // replace Task with the type you're using for tasks
+}
 const Board = () => {
   const { store, updateData } = useUpdateStore();
 
-  const activeBoard = store.boardStore.boards.filter(
+  const [boardName, setBoardName] = useState<string>("");
+  const [boardColumns, setBoardColumn] = useState<Column[]>([]);
+
+  const activeBoard = store.boardStore.boards.find(
     (board) => board.boardName === store.selectedBoardName.selectedBoardName
-  )[0];
+  );
 
-  const [boardName, setBoardName] = useState(activeBoard.boardName);
-  const [boardColumns, setBoardColumn] = useState(activeBoard.boardColumns);
+  useEffect(() => {
+    if (activeBoard) {
+      setBoardName(activeBoard.boardName);
+      setBoardColumn(activeBoard.boardColumns);
+    }
+  }, [store, activeBoard]);
 
+  if (store.boardStore.boards.length === 0 || !activeBoard) {
+    return;
+  }
   const samplePLaceholders = [
     "Done",
     "Doing",

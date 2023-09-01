@@ -37,10 +37,16 @@ const boardStore = createSlice({
         (board) => board.boardName === action.payload.boardName
       );
       state.boards[index] = action.payload;
+    },
+    deleteBoard: (state, action: PayloadAction<string>) => {
+      const index = state.boards.findIndex(
+        (board) => board.boardName === action.payload
+      );
+      state.boards.splice(index, 1);
     }
   },
 });
 
-export const { addBoard, updateBoard } = boardStore.actions;
+export const { addBoard, updateBoard, deleteBoard } = boardStore.actions;
 
 export default boardStore.reducer;
