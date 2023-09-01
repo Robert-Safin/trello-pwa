@@ -1,6 +1,7 @@
 import { switchSidebar } from "./stores/HideSidebar"
 import { updateSelectedBoardName } from "./stores/SelectedBoardName"
-import { addBoard } from "./stores/boardStore";
+import { addBoard, updateBoard } from "./stores/boardStore";
+import { modalIsOpen } from "./stores/editBoard";
 import { showModal } from "./stores/showAddNewBoard";
 
 
@@ -10,3 +11,5 @@ export type RootAction =
   | ReturnType<typeof updateSelectedBoardName>
   | ReturnType<typeof addBoard>
   | ReturnType<typeof showModal>
+  | ReturnType<typeof modalIsOpen>
+  | ReturnType<typeof updateBoard>

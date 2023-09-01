@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer, persistStore} from 'redux-persist';
 import boardStore from './stores/boardStore';
 import showAddNewBoard from './stores/showAddNewBoard';
-
+import showEditModal from './stores/editBoard';
 
 
 const rootReducer = combineReducers({
@@ -13,6 +13,7 @@ const rootReducer = combineReducers({
   selectedBoardName: selectedBoardName,
   boardStore: boardStore,
   showAddNewBoard: showAddNewBoard,
+  showEditModal: showEditModal
 });
 
 const persistConfig = {
