@@ -12,6 +12,8 @@ interface Column {
   tasks: Task[]; // replace Task with the type you're using for tasks
 }
 const Board = () => {
+
+
   const { store, updateData } = useUpdateStore();
 
   const [boardName, setBoardName] = useState<string>("");
@@ -87,13 +89,16 @@ const Board = () => {
             {activeBoard.boardColumns.map((column, i) => (
               <div key={i} className="border-4 w-[250px]">
                 <h1 className="headerGray uppercase">{column.columnName}</h1>
+                {activeBoard.boardColumns[i].tasks.map((task,i)=>
+                <h1 key={i}>{task.taskName}</h1>
+                )}
               </div>
             ))}
             <div className="bg-secondary dark:bg-secondaryDark border-4 w-[250px] mr-[250px]">
               <div
                 className="flex justify-center align-middle items-center h-full"
                 onClick={() => {
-                  console.log("hi");
+
 
                   updateData(modalIsOpen(true));
                 }}

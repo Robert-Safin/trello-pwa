@@ -7,15 +7,15 @@ import { RxBorderWidth } from "react-icons/rx";
 import Modal from "react-modal";
 import ThemeButton from "../ThemeButton/ThemeButton";
 import { BsClipboard2 } from "react-icons/bs";
-import { RiDeleteBack2Line } from "react-icons/ri";
-import { Column, addBoard, deleteBoard } from "@/redux/stores/boardStore";
-import SelectedBoardName, {
-  initialState,
+import {  deleteBoard } from "@/redux/stores/boardStore";
+import  {
+
   resetToDefault,
   updateSelectedBoardName,
 } from "@/redux/stores/SelectedBoardName";
 import { showModal } from "@/redux/stores/showAddNewBoard";
 import { modalIsOpen as modalIsOpenStore } from "@/redux/stores/editBoard";
+import AddTask from "../AddTask/AddTask";
 
 Modal.setAppElement("#root");
 
@@ -41,10 +41,7 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
-          <button className="btn hidden md:block absolute top-6 right-10">
-            + Add New Task
-          </button>
-          <button className="btn md:hidden absolute top-6 right-10">+</button>
+          <AddTask/>
           <BsThreeDotsVertical
             onClick={() => {
               setOptions(true);

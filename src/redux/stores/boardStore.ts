@@ -1,10 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type AddTaskPayload = {
+  task: Task;
+  columnName: string;
+  boardName: string;
+};
+
+export type SubTask= {
+  subTaskName: string;
+  subTaskDescription: string;
+  isCompleted: boolean;
+}
 
 export type Task = {
   taskName: string;
   taskDescription: string;
-  isCompleted: boolean;
+  boardName: string;
+  subTasks: SubTask[];
 };
 
 export type Column = {
@@ -43,10 +55,21 @@ const boardStore = createSlice({
         (board) => board.boardName === action.payload
       );
       state.boards.splice(index, 1);
-    }
+    },
+    addTask: (state, action: PayloadAction<AddTaskPayload>) => {
+      const index = state.boards.findIndex(
+        (board) => board.boardName === action.payload.boardName
+      );
+      const column = state.boards[index].boardColumns.find(
+        (col) => col.columnName === action.payload.columnName
+      );
+      if (column) {
+        column.tasks.push(action.payload.task);
+      }
+    },
   },
 });
 
-export const { addBoard, updateBoard, deleteBoard } = boardStore.actions;
+export const { addBoard, updateBoard, deleteBoard, addTask } = boardStore.actions;
 
 export default boardStore.reducer;
