@@ -6,11 +6,11 @@ export type AddTaskPayload = {
   boardName: string;
 };
 
-export type SubTask= {
+export type SubTask = {
   subTaskName: string;
   subTaskDescription: string;
   isCompleted: boolean;
-}
+};
 
 export type Task = {
   taskName: string;
@@ -67,9 +67,28 @@ const boardStore = createSlice({
         column.tasks.push(action.payload.task);
       }
     },
+
+   marksSelectedSubTaskAsCompleted: (state, action: PayloadAction<AddTaskPayload>) => {
+      const index = state.boards.findIndex(
+        (board) => board.boardName === action.payload.boardName
+      );
+      const column = state.boards[index].boardColumns.find(
+        (col) => col.columnName === action.payload.columnName
+      );
+      if (column) {
+        column.tasks.push(action.payload.task);
+      }
+    }
   },
 });
 
-export const { addBoard, updateBoard, deleteBoard, addTask } = boardStore.actions;
+export const {
+  addBoard,
+  updateBoard,
+  deleteBoard,
+  addTask,
+
+  marksSelectedSubTaskAsCompleted,
+} = boardStore.actions;
 
 export default boardStore.reducer;

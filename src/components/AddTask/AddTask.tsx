@@ -26,7 +26,9 @@ const AddTask = () => {
   ]);
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [columnName, setColumnName] = useState("");
+  const [columnName, setColumnName] = useState(SelectedBoardsColumns![0].columnName);
+  console.log(columnName);
+
 
   const placeHolderSubTasks = [
     "Clarify details about the upcoming project",
@@ -147,6 +149,7 @@ const AddTask = () => {
           <label className="textGray mt-2 dark:text-white">Status</label>
           <select
             className="input"
+            value={columnName}
             onChange={(e) => setColumnName(e.target.value)}
           >
             {SelectedBoardsColumns?.map((column, i) => (

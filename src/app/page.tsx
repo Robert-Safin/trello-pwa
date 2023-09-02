@@ -24,7 +24,7 @@ const Main = () => {
         <Navbar />
         {store.showSidebar.showSidebar === false && (
           <button
-            className="absolute bottom-4 bg-action p-2 rounded-r-2xl"
+            className="hidden md:block absolute bottom-4 bg-action p-2 rounded-r-2xl"
             onClick={() => updateData(switchSidebar(true))}
           >
             <AiFillEye className="w-6 h-6 text-white" />

@@ -24,6 +24,11 @@ const Navbar = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [options, setOptions] = useState(false);
 
+  const selectedBoardName = store.selectedBoardName.selectedBoardName;
+  const selectedBoard = store.boardStore.boards.find(
+    (board) => board.boardName === selectedBoardName
+  );
+
   return (
     <>
       <div
@@ -41,7 +46,7 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
-          <AddTask/>
+          {selectedBoard && <AddTask/>}
           <BsThreeDotsVertical
             onClick={() => {
               setOptions(true);
@@ -75,7 +80,7 @@ const Navbar = () => {
         shouldFocusAfterRender={false}
       >
         <>
-          <h2 className="text-textGray dark:text-white">ALL BOARDS[N]</h2>
+          <h2 className="text-textGray dark:text-white">ALL BOARDS ({store.boardStore.boards.length})</h2>
           <div className="my-4">
             {store.boardStore.boards.map((board, i) => (
               <div
@@ -99,7 +104,7 @@ const Navbar = () => {
                 onClick={() => updateData(showModal(true))}
               >
                 <BsClipboard2 className="w-5 h-5 text-action mr-2 ml-4 " />
-                <button className="text-action font-bold">
+                <button className="text-action font-bold" onClick={()=>updateData(showModal(true))}>
                   + Create New Board
                 </button>
               </div>

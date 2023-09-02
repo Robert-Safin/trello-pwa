@@ -5,15 +5,14 @@ import { modalIsOpen } from "@/redux/stores/editBoard";
 import { useEffect, useState } from "react";
 import { RiDeleteBack2Line } from "react-icons/ri";
 import Modal from "react-modal";
+import BoardCard from "./BoardCard/BoardCard";
 
 Modal.setAppElement("#root");
 interface Column {
   columnName: string;
-  tasks: Task[]; // replace Task with the type you're using for tasks
+  tasks: Task[];
 }
 const Board = () => {
-
-
   const { store, updateData } = useUpdateStore();
 
   const [boardName, setBoardName] = useState<string>("");
@@ -87,19 +86,19 @@ const Board = () => {
             }}
           >
             {activeBoard.boardColumns.map((column, i) => (
-              <div key={i} className="border-4 w-[250px]">
-                <h1 className="headerGray uppercase">{column.columnName}</h1>
-                {activeBoard.boardColumns[i].tasks.map((task,i)=>
-                <h1 key={i}>{task.taskName}</h1>
-                )}
+              <div key={i} className="w-[250px]">
+                <h1 className="headerGray uppercase mb-4">
+                  {column.columnName} ( {column.tasks.length} )
+                </h1>
+                {activeBoard.boardColumns[i].tasks.map((task, i) => (
+                  <BoardCard task={task} key={i}/>
+                ))}
               </div>
             ))}
             <div className="bg-secondary dark:bg-secondaryDark border-4 w-[250px] mr-[250px]">
               <div
                 className="flex justify-center align-middle items-center h-full"
                 onClick={() => {
-
-
                   updateData(modalIsOpen(true));
                 }}
               >

@@ -1,6 +1,6 @@
 import { switchSidebar } from "./stores/HideSidebar"
 import { resetToDefault, updateSelectedBoardName } from "./stores/SelectedBoardName"
-import { addBoard, addTask, deleteBoard, updateBoard } from "./stores/boardStore";
+import { addBoard, addTask, deleteBoard, marksSelectedSubTaskAsCompleted,  updateBoard } from "./stores/boardStore";
 import { modalIsOpen } from "./stores/editBoard";
 import { showModal } from "./stores/showAddNewBoard";
 
@@ -16,3 +16,4 @@ export type RootAction =
   | ReturnType<typeof deleteBoard>
   | ReturnType<typeof resetToDefault>
   | ReturnType<typeof addTask>
+  | ReturnType<typeof marksSelectedSubTaskAsCompleted>
