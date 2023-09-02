@@ -1,44 +1,38 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import showSidebar from './stores/HideSidebar';
-import selectedBoardName from './stores/SelectedBoardName';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {persistReducer, persistStore} from 'redux-persist';
-import boardStore from './stores/boardStore';
-import showAddNewBoard from './stores/showAddNewBoard';
-import showEditModal from './stores/editBoard';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { persistReducer, persistStore } from "redux-persist";
+import boardSlice from "./slices/boardSlice";
+import showNewBoardSlice from "./slices/showNearBoard";
+import activeBoardSlice from "./slices/activeBoardSlice";
+import hideSidebarSlice from "./slices/hideSidebarSlice";
 const rootReducer = combineReducers({
-  showSidebar: showSidebar,
-  selectedBoardName: selectedBoardName,
-  boardStore: boardStore,
-  showAddNewBoard: showAddNewBoard,
-  showEditModal: showEditModal
+  boardSlice: boardSlice,
+  showNewBoardSlice: showNewBoardSlice,
+  activeBoardSlice: activeBoardSlice,
+  hideSidebarSlice: hideSidebarSlice,
 });
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage: AsyncStorage,
   version: 1,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
 });
 
-
 export type RootState = ReturnType<typeof store.getState>;
-
+export type AppDispatch = typeof store.dispatch;
 
 export default store;
-
 export const persistor = persistStore(store);
 
 //persistor.purge();

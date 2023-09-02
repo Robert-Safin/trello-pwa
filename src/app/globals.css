@@ -54,6 +54,13 @@
 
 
 @layer components {
+  .label {
+    @apply text-textGray dark:text-white
+  }
+}
+
+
+@layer components {
   .tabActive {
     @apply flex items-center bg-action py-2 pl-4 text-white rounded-r-2xl mr-8
   }
