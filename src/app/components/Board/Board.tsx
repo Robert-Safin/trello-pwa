@@ -1,7 +1,7 @@
 "use client";
 
 import { useReadActiveBoardState, useReadBoardSate } from "@/redux/hooks/hooks";
-import { Column, Task, toggleSubTask } from "@/redux/slices/boardSlice";
+import { Column, Task, moveTask, toggleSubTask } from "@/redux/slices/boardSlice";
 import { useEffect, useState } from "react";
 import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "react-modal";
@@ -15,6 +15,10 @@ const Board = () => {
   const activeBoardState = useReadBoardSate().boards.find(
     (board) => board.name === activeBoard
   );
+
+  console.log(activeBoardState);
+
+
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -40,6 +44,15 @@ const Board = () => {
       setSubTasks(storeSubTasks);
     }
   }, [storeSubTasks]);
+
+  const selectedTaskStatus = selectedTask?.status.name;
+
+  const [status, setStatus] = useState(selectedTaskStatus);
+  useEffect(()=> {
+    setStatus(selectedTaskStatus)
+  },[selectedTaskStatus])
+
+
 
   return (
     <>
@@ -120,7 +133,6 @@ const Board = () => {
                 <span
                   className="w-4 h-4 mr-2
                 border border-textGray rounded
-
                 peer-checked:bg-action
                 peer-checked:border"
                 ></span>
@@ -129,7 +141,24 @@ const Board = () => {
                 </p>
               </div>
             ))}
-
+          <label className="label">Status</label>
+          <select
+            className="input text-black dark:text-white text-sm"
+            defaultValue={status}
+            onChange={(e) => {
+              // setStatus(e.target.value);
+              // dispatch(moveTask({
+              //   boardName: activeBoard!,
+              //   fromColumn: selectedTask!.status.name,
+              //   toColumn: e.target.value,
+              //   taskName: selectedTask!.name,
+              // }))
+            }}
+          >
+            {activeBoardState?.columns.map((col, i) => (
+              <option key={i}>{col.name}</option>
+            ))}
+          </select>
         </div>
       </Modal>
     </>

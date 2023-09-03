@@ -151,7 +151,33 @@ const boardSlice = createSlice({
         taskName: string;
       }>
     ) => {
-      // Your logic here to move a task
+      //console.log(action.payload);
+
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
+      if (board) {
+        const fromColumn = board.columns.find(
+          (col) => col.name === action.payload.fromColumn
+        );
+        if (fromColumn) {
+          const task = fromColumn.tasks.find(
+            (task) => task.name === action.payload.taskName
+          );
+          if (task) {
+            const toColumn = board.columns.find(
+              (col) => col.name === action.payload.toColumn
+            );
+            if (toColumn) {
+              fromColumn.tasks = fromColumn.tasks.filter(
+                (task) => task.name !== action.payload.taskName
+              );
+              toColumn.tasks.push(task);
+            }
+          }
+        }
+      }
+
     },
 
     // Subtask actions

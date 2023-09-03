@@ -113,7 +113,7 @@ const AddTaskModal = () => {
         </button>
         <label className="label">Status</label>
         <select
-          className="input"
+          className="input text-black dark:text-white text-sm"
           onChange={(e) => {
             setStatus(e.target.value);
           }}
