@@ -32,18 +32,20 @@ const AddTaskModal = () => {
   const [status, setStatus] = useState(activeBoardState!.columns[0].name);
 
   const handleSubmit = () => {
-    console.log(status);
-
-    dispatch(addTask({
-      boardName: activeBoard!.activeBoardName as string,
-      columnName: status,
-      task: {
-        name: taskName,
-        description: taskDescription,
-        subTasks: subsTasks,
-        status: activeBoardState!.columns.find((col) => col.name === status) as Column,
-      }
-    }));
+    dispatch(
+      addTask({
+        boardName: activeBoard!.activeBoardName as string,
+        columnName: status,
+        task: {
+          name: taskName,
+          description: taskDescription,
+          subTasks: subsTasks,
+          status: activeBoardState!.columns.find(
+            (col) => col.name === status
+          ) as Column,
+        },
+      })
+    );
     dispatch(toggleAddTaskModal());
   };
 
@@ -83,7 +85,14 @@ const AddTaskModal = () => {
         <label className="label">Subtasks</label>
         {subsTasks.map((subTask, i) => (
           <div key={i} className="flex items-center">
-            <input className="input w-full" />
+            <input
+              className="input w-full"
+              onChange={(e) => {
+                const newSubTasks = [...subsTasks];
+                newSubTasks[i].objective = e.target.value;
+                setSubTasks(newSubTasks);
+              }}
+            />
             <RxCross2
               className="w-8 h-8 ml-2 text-textGray hover:text-delete"
               onClick={() => {

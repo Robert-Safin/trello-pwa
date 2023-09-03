@@ -1,31 +1,66 @@
 "use client";
 
 import { useReadActiveBoardState, useReadBoardSate } from "@/redux/hooks/hooks";
+import { Column, Task, toggleSubTask } from "@/redux/slices/boardSlice";
+import { useEffect, useState } from "react";
+import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
+import Modal from "react-modal";
+import { useDispatch } from "react-redux";
+
+Modal.setAppElement("#root");
 
 const Board = () => {
+  const dispatch = useDispatch();
   const activeBoard = useReadActiveBoardState().activeBoardName;
   const activeBoardState = useReadBoardSate().boards.find(
     (board) => board.name === activeBoard
   );
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = (task: Task) => {
+    setSelectedTask(task);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedTask(null);
+  };
+
+  const storeSubTasks = useReadBoardSate()
+    .boards.find((board) => board.name === activeBoard)
+    ?.columns.find((col) => col.name === selectedTask?.status.name)
+    ?.tasks.find((task) => task.name === selectedTask?.name)?.subTasks;
+
+  const [subTasks, setSubTasks] = useState(storeSubTasks);
+
+  useEffect(() => {
+    if (storeSubTasks) {
+      setSubTasks(storeSubTasks);
+    }
+  }, [storeSubTasks]);
 
   return (
     <>
       {activeBoard !== null && (
-        <div className=" flex overflow-x-auto  h-[calc(100vh-70px)] p-8">
+        <div className="flex overflow-x-auto h-[calc(100vh-70px)] p-8 space-x-16">
           {activeBoardState?.columns.map((col, i) => (
-            <div key={i} className="min-w-[400px] ">
+            <div key={i} className="min-w-[350px]">
               <h1 className="headerGray mb-4 uppercase">
                 {col.name} ({col.tasks.length})
               </h1>
-              <div>
+              <div className="flex flex-col space-y-4">
                 {col.tasks.map((task, i) => (
-                  <div key={i}>
-                    <h1>{task.name}</h1>
-                    <p>
+                  <div
+                    key={i}
+                    className="bg-secondary dark:bg-secondaryDark p-4 rounded-lg shadow-lg"
+                    onClick={() => openModal(task)}
+                  >
+                    <h1 className="text hover:text-action">{task.name}</h1>
+                    <p className="textGray">
                       {task.subTasks.filter((task) => task.isCompleted).length}{" "}
-                      of{" "}
-                      {task.subTasks.filter((task) => !task.isCompleted).length}{" "}
-                      subtasks
+                      of {task.subTasks.length} subtasks
                     </p>
                   </div>
                 ))}
@@ -34,6 +69,58 @@ const Board = () => {
           ))}
         </div>
       )}
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        shouldFocusAfterRender={false}
+        className="bg-secondary dark:bg-secondaryDark absolute top-[25%] left-[50%] transform translate-x-[-50%] w-[80%] max-w-[500px] p-0 rounded-md"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          },
+        }}
+      >
+        <div className="flex flex-col p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-black dark:text-textGray text-2xl">
+              {selectedTask?.name}
+            </h1>
+            <BsThreeDotsVertical className="w-6 h-6 text-textGray" />
+          </div>
+          <p className="textGray mb-4">{selectedTask?.description}</p>
+          <label className="label">
+            Subtasks (
+            {subTasks && subTasks.filter((task) => task.isCompleted).length} of{" "}
+            {subTasks?.length})
+          </label>
+          {subTasks &&
+            subTasks.map((subTask, i) => (
+              <div
+                key={i}
+                className="flex items-center bg-primary dark:bg-primaryDark my-2 p-4 rounded-lg"
+                onClick={() => {
+                  dispatch(
+                    toggleSubTask({
+                      boardName: activeBoard!,
+                      columnName: selectedTask!.status.name,
+                      taskName: selectedTask!.name,
+                      objective: storeSubTasks![i].objective,
+                    })
+                  );
+                }}
+              >
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 mr-2  "
+                  checked={subTask.isCompleted}
+                  onChange={() => {}}
+                />
+                <p className="text">{subTask.objective}</p>
+              </div>
+            ))}
+        </div>
+      </Modal>
     </>
   );
 };

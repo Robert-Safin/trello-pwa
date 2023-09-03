@@ -31,7 +31,7 @@ const initialState: BoardState = {
 };
 
 const boardSlice = createSlice({
-  name: 'boardSlice',
+  name: "boardSlice",
   initialState,
   reducers: {
     // Board actions
@@ -39,32 +39,62 @@ const boardSlice = createSlice({
       state.boards.push(action.payload);
     },
     deleteBoard: (state, action: PayloadAction<string>) => {
-      state.boards = state.boards.filter(board => board.name !== action.payload);
+      state.boards = state.boards.filter(
+        (board) => board.name !== action.payload
+      );
     },
-    renameBoard: (state, action: PayloadAction<{oldName: string, newName: string}>) => {
-      const board = state.boards.find(board => board.name === action.payload.oldName);
+    renameBoard: (
+      state,
+      action: PayloadAction<{ oldName: string; newName: string }>
+    ) => {
+      const board = state.boards.find(
+        (board) => board.name === action.payload.oldName
+      );
       if (board) {
         board.name = action.payload.newName;
       }
     },
 
     // Column actions
-    addColumn: (state, action: PayloadAction<{boardName: string, column: Column}>) => {
-      const board = state.boards.find(board => board.name === action.payload.boardName);
+    addColumn: (
+      state,
+      action: PayloadAction<{ boardName: string; column: Column }>
+    ) => {
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
       if (board) {
         board.columns.push(action.payload.column);
       }
     },
-    deleteColumn: (state, action: PayloadAction<{boardName: string, columnName: string}>) => {
-      const board = state.boards.find(board => board.name === action.payload.boardName);
+    deleteColumn: (
+      state,
+      action: PayloadAction<{ boardName: string; columnName: string }>
+    ) => {
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
       if (board) {
-        board.columns = board.columns.filter(col => col.name !== action.payload.columnName);
+        board.columns = board.columns.filter(
+          (col) => col.name !== action.payload.columnName
+        );
       }
     },
-    renameColumn: (state, action: PayloadAction<{boardName: string, oldName: string, newName: string}>) => {
-      const board = state.boards.find(board => board.name === action.payload.boardName);
+    renameColumn: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        oldName: string;
+        newName: string;
+      }>
+    ) => {
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
       if (board) {
-        const column = board.columns.find(col => col.name === action.payload.oldName);
+        const column = board.columns.find(
+          (col) => col.name === action.payload.oldName
+        );
         if (column) {
           column.name = action.payload.newName;
         }
@@ -72,43 +102,131 @@ const boardSlice = createSlice({
     },
 
     // Task actions
-    addTask: (state, action: PayloadAction<{boardName: string, columnName: string, task: Task}>) => {
-      const board = state.boards.find(board => board.name === action.payload.boardName);
+    addTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        columnName: string;
+        task: Task;
+      }>
+    ) => {
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
       if (board) {
-        const column = board.columns.find(col => col.name === action.payload.columnName);
+        const column = board.columns.find(
+          (col) => col.name === action.payload.columnName
+        );
         if (column) {
           column.tasks.push(action.payload.task);
         }
       }
     },
-    deleteTask: (state, action: PayloadAction<{boardName: string, columnName: string, taskName: string}>) => {
+    deleteTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        columnName: string;
+        taskName: string;
+      }>
+    ) => {
       // Your logic here to delete a task
     },
-    updateTask: (state, action: PayloadAction<{boardName: string, columnName: string, task: Task}>) => {
+    updateTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        columnName: string;
+        task: Task;
+      }>
+    ) => {
       // Your logic here to update a task
     },
-    moveTask: (state, action: PayloadAction<{boardName: string, fromColumn: string, toColumn: string, taskName: string}>) => {
+    moveTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        fromColumn: string;
+        toColumn: string;
+        taskName: string;
+      }>
+    ) => {
       // Your logic here to move a task
     },
 
     // Subtask actions
-    addSubTask: (state, action: PayloadAction<{boardName: string, columnName: string, taskName: string, subTask: SubTask}>) => {
+    addSubTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        columnName: string;
+        taskName: string;
+        subTask: SubTask;
+      }>
+    ) => {
       // Your logic here to add a subtask
     },
-    deleteSubTask: (state, action: PayloadAction<{boardName: string, columnName: string, taskName: string, objective: string}>) => {
+    deleteSubTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        columnName: string;
+        taskName: string;
+        objective: string;
+      }>
+    ) => {
       // Your logic here to delete a subtask
     },
-    toggleSubTask: (state, action: PayloadAction<{boardName: string, columnName: string, taskName: string, objective: string}>) => {
-      // Your logic here to toggle a subtask
+    toggleSubTask: (
+      state,
+      action: PayloadAction<{
+        boardName: string;
+        columnName: string;
+        taskName: string;
+        objective: string;
+      }>
+    ) => {
+      //console.log(action.payload);
+
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
+      if (board) {
+        const column = board.columns.find(
+          (col) => col.name === action.payload.columnName
+        );
+        if (column) {
+          const task = column.tasks.find(
+            (task) => task.name === action.payload.taskName
+          );
+          if (task) {
+            const subTask = task.subTasks.find(
+              (subTask) => subTask.objective === action.payload.objective
+            );
+            if (subTask) {
+              subTask.isCompleted = !subTask.isCompleted;
+            }
+          }
+        }
+      }
     },
   },
 });
 
 export const {
-  addBoard, deleteBoard, renameBoard,
-  addColumn, deleteColumn, renameColumn,
-  addTask, deleteTask, updateTask, moveTask,
-  addSubTask, deleteSubTask, toggleSubTask
+  addBoard,
+  deleteBoard,
+  renameBoard,
+  addColumn,
+  deleteColumn,
+  renameColumn,
+  addTask,
+  deleteTask,
+  updateTask,
+  moveTask,
+  addSubTask,
+  deleteSubTask,
+  toggleSubTask,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
