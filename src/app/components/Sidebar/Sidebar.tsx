@@ -3,7 +3,7 @@ import {
   useReadBoardSate,
   useReadShowNewBoard,
 } from "@/redux/hooks/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuClipboardList } from "react-icons/lu";
 import { TbBrandRedux } from "react-icons/tb";
 import ThemeButton from "../ThemeButton/ThemeButton";
@@ -19,11 +19,27 @@ Modal.setAppElement("#root");
 
 const Sidebar = () => {
   const dispatch = useDispatch();
+  const boardState = useReadBoardSate();
+
   const [selectedBoard, setSelectedBoard] = useState<string | null>(
     useReadActiveBoardState().activeBoardName
   );
+
+  const selectedBoardName = useReadActiveBoardState().activeBoardName;
+  useEffect(() => {
+    setSelectedBoard(selectedBoardName);
+  }, [selectedBoardName]);
+
   const [columns, setColumns] = useState<Column[]>([]);
   const [boardName, setBoardName] = useState<string>("");
+
+  const [existingBoardNames, setExistingBoardNames] = useState<string[]>(
+    useReadBoardSate().boards.map((board) => board.name)
+  );
+
+  useEffect(() => {
+    setExistingBoardNames(boardState.boards.map((board) => board.name));
+  }, [boardState.boards]);
 
   const randomColumnName = [
     "To Do",
@@ -42,7 +58,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="hidden md:flex flex-col justify-between w-[400px] bg-secondary dark:bg-secondaryDark h-screen border-r">
+      <div className="hidden md:flex flex-col justify-between min-w-[300px] bg-secondary dark:bg-secondaryDark h-screen border-r">
         <div>
           <div className="flex items-center p-4">
             <TbBrandRedux className="w-10 h-10 text-action mr-2" />
@@ -58,7 +74,7 @@ const Sidebar = () => {
             <div
               key={i}
               className={
-                selectedBoard === board.name ? "tabActive" : "tabInactive"
+                selectedBoardName === board.name ? "tabActive" : "tabInactive"
               }
               onClick={() => {
                 dispatch(setActiveBoardName(board.name));
@@ -67,14 +83,14 @@ const Sidebar = () => {
             >
               <LuClipboardList
                 className={
-                  selectedBoard === board.name
+                  selectedBoardName === board.name
                     ? "w-5 h-5 mr-2 text-white"
                     : "w-5 h-5 mr-2 text-textGray "
                 }
               />
               <p
                 className={
-                  selectedBoard === board.name ? "text-white" : "textGray"
+                  selectedBoardName === board.name ? "text-white" : "textGray"
                 }
               >
                 {board.name}
@@ -97,9 +113,14 @@ const Sidebar = () => {
           <ThemeButton />
           <div className="flex items-center pb-4 pl-4">
             <BiHide className="w-6 h-6 text-textGray mr-2" />
-            <p className="text-textGray"onClick={()=> {
-              dispatch(toggleHideSidebar())
-            }}>Hide Sidebar</p>
+            <p
+              className="text-textGray"
+              onClick={() => {
+                dispatch(toggleHideSidebar());
+              }}
+            >
+              Hide Sidebar
+            </p>
           </div>
         </div>
       </div>
@@ -171,9 +192,16 @@ const Sidebar = () => {
             className="btn mt-4"
             onClick={() => {
               const filteredColumns = columns.filter((col) => col.name !== "");
-              const defaultName =
+
+              let defaultName =
                 boardName ||
                 `Untitled Board ${Math.floor(Math.random() * 1000)}`;
+              while (existingBoardNames.includes(defaultName)) {
+                defaultName = `${defaultName} ${Math.floor(
+                  Math.random() * 1000
+                )}`;
+              }
+
               dispatch(addBoard({ name: defaultName, columns: [] }));
               for (let column of filteredColumns) {
                 dispatch(addColumn({ boardName: defaultName, column }));

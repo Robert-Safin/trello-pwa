@@ -6,11 +6,15 @@ import boardSlice from "./slices/boardSlice";
 import showNewBoardSlice from "./slices/showNearBoard";
 import activeBoardSlice from "./slices/activeBoardSlice";
 import hideSidebarSlice from "./slices/hideSidebarSlice";
+import showEditBoardSlice from "./slices/showEditBoardSlice";
+import showAddTaskModalSlice from "./slices/showAddTaskModal";
 const rootReducer = combineReducers({
   boardSlice: boardSlice,
   showNewBoardSlice: showNewBoardSlice,
   activeBoardSlice: activeBoardSlice,
   hideSidebarSlice: hideSidebarSlice,
+  showEditBoardSlice: showEditBoardSlice,
+  showAddTaskModalSlice: showAddTaskModalSlice,
 });
 
 const persistConfig = {

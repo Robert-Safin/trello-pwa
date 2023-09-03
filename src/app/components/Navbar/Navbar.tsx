@@ -7,9 +7,12 @@ import { useDispatch } from "react-redux";
 import { useReadActiveBoardState, useReadBoardSate } from "@/redux/hooks/hooks";
 import { LuClipboardList } from "react-icons/lu";
 import { setActiveBoardName } from "@/redux/slices/activeBoardSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ThemeButton from "../ThemeButton/ThemeButton";
 import { toggleShowNewBoard } from "@/redux/slices/showNearBoard";
+import { deleteBoard } from "@/redux/slices/boardSlice";
+import { toggleEditBoardModal } from "@/redux/slices/showEditBoardSlice";
+import { toggleAddTaskModal } from "@/redux/slices/showAddTaskModal";
 
 Modal.setAppElement("#root");
 
@@ -19,11 +22,17 @@ const Navbar = () => {
   const [selectedBoard, setSelectedBoard] = useState<string | null>(
     useReadActiveBoardState().activeBoardName
   );
+  const activeBoardName = useReadActiveBoardState().activeBoardName;
 
+  useEffect(() => {
+    setSelectedBoard(activeBoardName);
+  }, [activeBoardName]);
+
+  const [showOptions, setShowOptions] = useState(false);
 
   return (
     <>
-      <div className="w-full flex justify-between border-b p-4 bg-secondary dark:bg-primaryDark">
+      <div className="w-full flex justify-between border-b p-4 bg-secondary dark:bg-primaryDark min-h-[60px]">
         <div className="flex items-center">
           <TbBrandRedux className="w-8 h-8 text-action md:hidden" />
           <h1 className="line-clamp-1 max-w-[220px] text-xl dark:text-white">
@@ -35,8 +44,56 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
-          <button className="btn">+</button>
-          <BsThreeDotsVertical className="w-8 h-8 text-textGray" />
+          <button
+            className="btn md:hidden"
+            onClick={() => {
+              dispatch(toggleAddTaskModal());
+            }}
+          >
+            +
+          </button>
+          <button
+            className="btn hidden md:block"
+            onClick={() => {
+              dispatch(toggleAddTaskModal());
+            }}
+          >
+            + Add New Task
+          </button>
+          {useReadActiveBoardState().activeBoardName !== null && (
+            <BsThreeDotsVertical
+              className="w-8 h-8 text-textGray"
+              onClick={() => {
+                setShowOptions(true);
+                setTimeout(() => {
+                  setShowOptions(false);
+                }, 3000);
+              }}
+            />
+          )}
+          {showOptions && (
+            <div className="absolute flex flex-col justify-evenly top-[70px] right-8 w-32 h-24 bg-secondary dark:bg-secondaryDark rounded-md p-4">
+              <p
+                className="text-textGray mb-1"
+                onClick={() => {
+                  dispatch(toggleEditBoardModal());
+                  setShowOptions(false);
+                }}
+              >
+                Edit Board
+              </p>
+              <p
+                className="text-delete mt-1"
+                onClick={() => {
+                  dispatch(deleteBoard(selectedBoard!));
+                  dispatch(setActiveBoardName(null));
+                  setShowOptions(false);
+                }}
+              >
+                Delete Board
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <Modal

@@ -4,6 +4,8 @@ import { BoardState } from "../slices/boardSlice"
 import { activeBoardState } from "../slices/activeBoardSlice"
 import { ShowNewBoardState } from "../slices/showNearBoard"
 import { HideSidebarState } from "../slices/hideSidebarSlice"
+import { showEditModalState } from "../slices/showEditBoardSlice"
+import { showAddTaskModalState } from "../slices/showAddTaskModal"
 
 
 export const useReadBoardSate = () => {
@@ -27,4 +29,14 @@ export const useReadActiveBoardState = () => {
 export const useReadHideSidebarState = () => {
   const slice = useSelector<RootState>(state => state.hideSidebarSlice)
   return slice as HideSidebarState
+}
+
+export const useReadShowEditBoardState = () => {
+  const slice = useSelector<RootState>(state => state.showEditBoardSlice)
+  return slice as showEditModalState
+}
+
+export const useReadShowAddTaskModalState = () => {
+  const slice = useSelector<RootState>(state => state.showAddTaskModalSlice)
+  return slice as showAddTaskModalState
 }

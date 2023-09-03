@@ -73,7 +73,13 @@ const boardSlice = createSlice({
 
     // Task actions
     addTask: (state, action: PayloadAction<{boardName: string, columnName: string, task: Task}>) => {
-      // Your logic here to add a task
+      const board = state.boards.find(board => board.name === action.payload.boardName);
+      if (board) {
+        const column = board.columns.find(col => col.name === action.payload.columnName);
+        if (column) {
+          column.tasks.push(action.payload.task);
+        }
+      }
     },
     deleteTask: (state, action: PayloadAction<{boardName: string, columnName: string, taskName: string}>) => {
       // Your logic here to delete a task
