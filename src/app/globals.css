@@ -55,7 +55,7 @@
 
 @layer components {
   .label {
-    @apply text-textGray dark:text-white
+    @apply text-textGray dark:text-white text-sm mb-1 mt-2
   }
 }
 

@@ -90,7 +90,9 @@ const Sidebar = () => {
               />
               <p
                 className={
-                  selectedBoardName === board.name ? "text-white w-full line-clamp-1" : "textGray w-full line-clamp-1"
+                  selectedBoardName === board.name
+                    ? "text-white w-full line-clamp-1"
+                    : "textGray w-full line-clamp-1"
                 }
               >
                 {board.name}
@@ -111,13 +113,19 @@ const Sidebar = () => {
         </div>
         <div>
           <ThemeButton />
-          <div className="flex items-center pb-4 pl-4">
-            <BiHide className="w-6 h-6 text-textGray mr-2" />
+          <div
+            className="flex items-center pb-4 pl-4 hover:text-action"
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              dispatch(toggleHideSidebar());
+            }}
+          >
+            <BiHide className="w-6 h-6 text-textGray mr-2  hover:text-action" />
             <p
-              className="text-textGray"
-              onClick={() => {
-                dispatch(toggleHideSidebar());
-              }}
+              className="text-textGray hover:text-action"
+
             >
               Hide Sidebar
             </p>

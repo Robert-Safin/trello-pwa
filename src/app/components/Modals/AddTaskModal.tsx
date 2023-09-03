@@ -62,8 +62,8 @@ const AddTaskModal = () => {
       }}
     >
       <div className="flex flex-col p-4">
-        <h1 className="text-black dark:text-textGray text-2xl mb-4">
-          Add Task
+        <h1 className="text-black dark:text-white text-2xl mb-4">
+          Add New Task
         </h1>
 
         <label className="label">Task Name</label>
@@ -82,7 +82,7 @@ const AddTaskModal = () => {
             setTaskDescription(e.target.value);
           }}
         />
-        <label className="label">Subtasks</label>
+        {subsTasks.length !== 0 && <label className="label">Subtasks</label>}
         {subsTasks.map((subTask, i) => (
           <div key={i} className="flex items-center">
             <input
