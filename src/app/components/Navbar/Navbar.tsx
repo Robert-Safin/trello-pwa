@@ -32,8 +32,8 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="w-full flex justify-between border-b p-4 bg-secondary dark:bg-primaryDark min-h-[60px]">
-        <div className="flex items-center">
+      <div className="w-full flex justify-between border-b  dark:border-slate-700 shadow-lg p-4 bg-secondary dark:bg-primaryDark min-h-[60px]">
+        <div className="flex items-center pl-4">
           <TbBrandRedux className="w-8 h-8 text-action md:hidden" />
           <h1 className="line-clamp-1 max-w-[220px] text-xl dark:text-white">
             {useReadActiveBoardState().activeBoardName || "Select Board"}

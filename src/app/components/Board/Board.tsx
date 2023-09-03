@@ -48,7 +48,7 @@ const Board = () => {
           {activeBoardState?.columns.map((col, i) => (
             <div key={i} className="min-w-[350px]">
               <h1 className="headerGray mb-4 uppercase">
-                {col.name} ({col.tasks.length})
+                {col.name} ( {col.tasks.length} )
               </h1>
               <div className="flex flex-col space-y-4">
                 {col.tasks.map((task, i) => (
@@ -83,7 +83,7 @@ const Board = () => {
       >
         <div className="flex flex-col p-4">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-black dark:text-textGray text-2xl">
+            <h1 className="text-black dark:text-white text-2xl">
               {selectedTask?.name}
             </h1>
             <BsThreeDotsVertical className="w-6 h-6 text-textGray" />
@@ -99,6 +99,7 @@ const Board = () => {
               <div
                 key={i}
                 className="flex items-center bg-primary dark:bg-primaryDark my-2 p-4 rounded-lg"
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(
                     toggleSubTask({
@@ -112,13 +113,23 @@ const Board = () => {
               >
                 <input
                   type="checkbox"
-                  className="w-4 h-4 mr-2  "
+                  className="peer hidden"
                   checked={subTask.isCompleted}
                   onChange={() => {}}
                 />
-                <p className="text">{subTask.objective}</p>
+                <span
+                  className="w-4 h-4 mr-2
+                border border-textGray rounded
+
+                peer-checked:bg-action
+                peer-checked:border"
+                ></span>
+                <p className="text peer-checked:line-through decoration-action decoration-2 w-full line-clamp-1">
+                  {subTask.objective}
+                </p>
               </div>
             ))}
+
         </div>
       </Modal>
     </>

@@ -98,7 +98,7 @@ const EditBoardModal = () => {
       }}
     >
       <div className="flex flex-col p-4">
-      <h1 className="text-black dark:text-textGray text-2xl mb-4">Edit Board</h1>
+      <h1 className="text-black dark:text-white text-2xl mb-4">Edit Board</h1>
         <label className="label">Board Name</label>
         <input
           type="text"

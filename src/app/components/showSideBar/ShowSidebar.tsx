@@ -10,7 +10,7 @@ const ShowSidebar = () => {
     <div className='absolute bottom-4  bg-action px-3 py-2 rounded-r-full' onClick={()=> {
       dispatch(toggleHideSidebar())
     }}>
-      <AiFillEye className="w-6 h-6 dark:text-textGray text-white"/>
+      <AiFillEye className="w-6 h-6 dark:text-white text-black"/>
     </div>
   )
 }

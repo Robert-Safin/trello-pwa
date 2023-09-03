@@ -58,7 +58,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="hidden md:flex flex-col justify-between min-w-[300px] bg-secondary dark:bg-secondaryDark h-screen border-r">
+      <div className="hidden md:flex flex-col justify-between min-w-[300px] bg-secondary dark:bg-secondaryDark h-screen border-r dark:border-slate-700 drop-shadow-lg">
         <div>
           <div className="flex items-center p-4">
             <TbBrandRedux className="w-10 h-10 text-action mr-2" />
@@ -67,7 +67,7 @@ const Sidebar = () => {
             </h1>
           </div>
 
-          <h1 className="textGray pl-4 mt-4">
+          <h1 className="textGray pl-4 mt-4 mb-4">
             ALL BOARDS ({useReadBoardSate().boards.length})
           </h1>
           {useReadBoardSate().boards.map((board, i) => (
@@ -90,7 +90,7 @@ const Sidebar = () => {
               />
               <p
                 className={
-                  selectedBoardName === board.name ? "text-white" : "textGray"
+                  selectedBoardName === board.name ? "text-white w-full line-clamp-1" : "textGray w-full line-clamp-1"
                 }
               >
                 {board.name}
@@ -136,7 +136,7 @@ const Sidebar = () => {
         }}
       >
         <div className="flex flex-col p-4">
-          <h1 className="text-black dark:text-textGray text-2xl mb-4">
+          <h1 className="text-black dark:text-white text-2xl mb-4">
             Add New Board
           </h1>
 
