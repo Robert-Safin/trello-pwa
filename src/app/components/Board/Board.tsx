@@ -13,7 +13,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import Modal from "react-modal";
 import { useDispatch } from "react-redux";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 Modal.setAppElement("#root");
 
 const Board = () => {
@@ -84,8 +84,6 @@ const Board = () => {
   return (
     <>
       {activeBoard !== null && (
-
-
         <div
           className="flex overflow-x-auto h-[calc(100vh-80px)] p-8 space-x-16"
           ref={containerRef}
@@ -105,8 +103,6 @@ const Board = () => {
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-
-
                     key={i}
                     className="bg-secondary dark:bg-secondaryDark p-4 rounded-lg shadow-lg hover:shadow-action"
                     onClick={() => {
@@ -125,7 +121,6 @@ const Board = () => {
             </div>
           ))}
         </div>
-
       )}
       {showEditTask === false && (
         <Modal
@@ -187,13 +182,16 @@ const Board = () => {
               {selectedTaskStoreState?.description}
             </p>
             <p className="textGray font-bold">
-           Subtasks ({
+              Subtasks (
+              {
                 selectedTaskStoreState?.subTasks.filter(
                   (subTask) => subTask.isCompleted
                 ).length
               }{" "}
               of {selectedTaskStoreState?.subTasks.length})
             </p>
+            <div className="max-h-[180px] overflow-y-auto">
+
             {selectedTaskStoreState?.subTasks.map((subTask, i) => (
               <div
                 key={i}
@@ -222,6 +220,7 @@ const Board = () => {
                 <p className="text">{subTask.objective}</p>
               </div>
             ))}
+            </div>
             <p className="textGray">Current Status</p>
             <select
               className="input text-black dark:text-white text-sm p-3"
@@ -256,7 +255,7 @@ const Board = () => {
         isOpen={showEditTask}
         onRequestClose={() => setShowEditTask(false)}
         shouldFocusAfterRender={false}
-        className="bg-secondary dark:bg-secondaryDark absolute top-[25%] left-[50%] transform translate-x-[-50%] w-[80%] max-w-[500px] p-0 rounded-md"
+        className="bg-secondary dark:bg-secondaryDark absolute top-[10%] left-[50%] transform translate-x-[-50%] w-[80%] max-w-[500px] p-0 rounded-md"
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -285,6 +284,7 @@ const Board = () => {
           />
 
           <label className="label">Subtasks</label>
+          <div className="max-h-[180px] overflow-y-auto">
           {editState?.subTasks.map((subTask, i) => (
             <div key={i} className="flex items-center">
               <input
@@ -314,6 +314,8 @@ const Board = () => {
               />
             </div>
           ))}
+
+          </div>
           <button
             className="btnWhite mt-8 mb-4"
             onClick={() => {

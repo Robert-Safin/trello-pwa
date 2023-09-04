@@ -164,28 +164,29 @@ const Sidebar = () => {
             }}
           />
           {columns.length > 0 && <label className="label">Board Columns</label>}
-
-          {columns.map((col, i) => (
-            <div key={i} className="flex items-center">
-              <input
-                className="input w-full"
-                value={col.name}
-                onChange={(e) => {
-                  const newColumns = [...columns];
-                  newColumns[i].name = e.target.value;
-                  setColumns(newColumns);
-                }}
-              />
-              <RxCross2
-                className="w-8 h-8 ml-2 text-textGray hover:text-delete"
-                onClick={() => {
-                  const newColumns = [...columns];
-                  newColumns.splice(i, 1);
-                  setColumns(newColumns);
-                }}
-              />
-            </div>
-          ))}
+          <div className="max-h-[100px] overflow-y-auto">
+            {columns.map((col, i) => (
+              <div key={i} className="flex items-center">
+                <input
+                  className="input w-full"
+                  value={col.name}
+                  onChange={(e) => {
+                    const newColumns = [...columns];
+                    newColumns[i].name = e.target.value;
+                    setColumns(newColumns);
+                  }}
+                />
+                <RxCross2
+                  className="w-8 h-8 ml-2 text-textGray hover:text-delete"
+                  onClick={() => {
+                    const newColumns = [...columns];
+                    newColumns.splice(i, 1);
+                    setColumns(newColumns);
+                  }}
+                />
+              </div>
+            ))}
+          </div>
 
           <button
             className="btnWhite mt-4"

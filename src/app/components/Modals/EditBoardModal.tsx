@@ -98,7 +98,7 @@ const EditBoardModal = () => {
       }}
     >
       <div className="flex flex-col p-4">
-      <h1 className="text-black dark:text-white text-2xl mb-4">Edit Board</h1>
+        <h1 className="text-black dark:text-white text-2xl mb-4">Edit Board</h1>
         <label className="label">Board Name</label>
         <input
           type="text"
@@ -109,31 +109,32 @@ const EditBoardModal = () => {
           }}
         />
         <label className="label">Board Columns</label>
-
-        {columns.map((col, i) => (
-          <div key={i} className="flex items-center">
-            <input
-              className="input w-full"
-              value={col.name}
-              onChange={(e) => {
-                setColumns((prevColumns) =>
-                  prevColumns.map((col, index) => {
-                    if (index !== i) return col;
-                    return { ...col, name: e.target.value };
-                  })
-                );
-              }}
-            />
-            <RxCross2
-              className="w-8 h-8 ml-2 text-textGray hover:text-delete"
-              onClick={() => {
-                const newColumns = [...columns];
-                newColumns.splice(i, 1);
-                setColumns(newColumns);
-              }}
-            />
-          </div>
-        ))}
+        <div className="max-h-[100px] overflow-y-auto">
+          {columns.map((col, i) => (
+            <div key={i} className="flex items-center">
+              <input
+                className="input w-full"
+                value={col.name}
+                onChange={(e) => {
+                  setColumns((prevColumns) =>
+                    prevColumns.map((col, index) => {
+                      if (index !== i) return col;
+                      return { ...col, name: e.target.value };
+                    })
+                  );
+                }}
+              />
+              <RxCross2
+                className="w-8 h-8 ml-2 text-textGray hover:text-delete"
+                onClick={() => {
+                  const newColumns = [...columns];
+                  newColumns.splice(i, 1);
+                  setColumns(newColumns);
+                }}
+              />
+            </div>
+          ))}
+        </div>
 
         <button
           className="btnWhite mt-8"

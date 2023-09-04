@@ -54,7 +54,7 @@ const AddTaskModal = () => {
       isOpen={modalIsOpen}
       onRequestClose={() => dispatch(toggleAddTaskModal())}
       shouldFocusAfterRender={false}
-      className="bg-secondary dark:bg-secondaryDark absolute top-[25%] left-[50%] transform translate-x-[-50%] w-[80%] max-w-[500px] p-0 rounded-md"
+      className="bg-secondary dark:bg-secondaryDark absolute top-[10%] left-[50%] transform translate-x-[-50%] w-[80%] max-w-[500px] p-0 rounded-md"
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -83,26 +83,29 @@ const AddTaskModal = () => {
           }}
         />
         {subsTasks.length !== 0 && <label className="label">Subtasks</label>}
-        {subsTasks.map((subTask, i) => (
-          <div key={i} className="flex items-center">
-            <input
-              className="input w-full"
-              onChange={(e) => {
-                const newSubTasks = [...subsTasks];
-                newSubTasks[i].objective = e.target.value;
-                setSubTasks(newSubTasks);
-              }}
-            />
-            <RxCross2
-              className="w-8 h-8 ml-2 text-textGray hover:text-delete"
-              onClick={() => {
-                const newSubTasks = [...subsTasks];
-                newSubTasks.splice(i, 1);
-                setSubTasks(newSubTasks);
-              }}
-            />
-          </div>
-        ))}
+        <div className="max-h-[100px] overflow-y-auto">
+          {subsTasks.map((subTask, i) => (
+            <div key={i} className="flex items-center">
+              <input
+                className="input w-full"
+                onChange={(e) => {
+                  const newSubTasks = [...subsTasks];
+                  newSubTasks[i].objective = e.target.value;
+                  setSubTasks(newSubTasks);
+                }}
+              />
+              <RxCross2
+                className="w-8 h-8 ml-2 text-textGray hover:text-delete"
+                onClick={() => {
+                  const newSubTasks = [...subsTasks];
+                  newSubTasks.splice(i, 1);
+                  setSubTasks(newSubTasks);
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
         <button
           className="btnWhite my-4"
           onClick={() => {
