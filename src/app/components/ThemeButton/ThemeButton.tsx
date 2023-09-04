@@ -32,6 +32,7 @@ const ThemeButton = () => {
     }
   }, []);
 
+
   return (
     <div className="rounded-md bg-primary dark:bg-primaryDark flex justify-evenly items-center p-4 m-4 border dark:border-slate-900 shadow-inner">
       <BsMoonStarsFill className="text-textGray w-4 h-4" />
