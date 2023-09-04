@@ -151,10 +151,31 @@ const boardSlice = createSlice({
       action: PayloadAction<{
         boardName: string;
         columnName: string;
-        task: Task;
+        oldTaskName: string;
+        newTask: Task;
       }>
     ) => {
-      // Your logic here to update a task
+
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
+      if (board) {
+        const column = board.columns.find(
+          (col) => col.name === action.payload.columnName
+        );
+        if (column) {
+          const task = column.tasks.find(
+            (task) => task.name === action.payload.oldTaskName
+          );
+          if (task) {
+            task.name = action.payload.newTask.name;
+            task.description = action.payload.newTask.description;
+            task.status = action.payload.newTask.status;
+            task.subTasks = action.payload.newTask.subTasks;
+          }
+        }
+      }
+
     },
     moveTask: (
       state,
