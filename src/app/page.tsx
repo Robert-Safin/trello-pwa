@@ -19,6 +19,8 @@ const Main = () => {
   const activeBoardState = useReadBoardSate().boards.find(
     (board) => board.name === activeBoard
   );
+  //console.log(activeBoardState);
+
   return (
     <div className="flex">
       {useReadHideSidebarState().sidebarIsShown && <Sidebar />}

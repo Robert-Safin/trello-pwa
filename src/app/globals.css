@@ -90,6 +90,3 @@
 }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(105,107,129);
-}

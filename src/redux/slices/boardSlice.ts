@@ -146,38 +146,41 @@ const boardSlice = createSlice({
       state,
       action: PayloadAction<{
         boardName: string;
-        fromColumn: string;
-        toColumn: string;
+        columnName: string;
         taskName: string;
+        newColumnName: string;
       }>
     ) => {
-      //console.log(action.payload);
+      // move task to another column
 
       const board = state.boards.find(
         (board) => board.name === action.payload.boardName
       );
+
       if (board) {
-        const fromColumn = board.columns.find(
-          (col) => col.name === action.payload.fromColumn
+        const column = board.columns.find(
+          (col) => col.name === action.payload.columnName
         );
-        if (fromColumn) {
-          const task = fromColumn.tasks.find(
+
+        if (column) {
+          const task = column.tasks.find(
             (task) => task.name === action.payload.taskName
           );
+
           if (task) {
-            const toColumn = board.columns.find(
-              (col) => col.name === action.payload.toColumn
+            const newColumn = board.columns.find(
+              (col) => col.name === action.payload.newColumnName
             );
-            if (toColumn) {
-              fromColumn.tasks = fromColumn.tasks.filter(
+
+            if (newColumn) {
+              newColumn.tasks.push(task);
+              column.tasks = column.tasks.filter(
                 (task) => task.name !== action.payload.taskName
               );
-              toColumn.tasks.push(task);
             }
           }
         }
       }
-
     },
 
     // Subtask actions
@@ -212,7 +215,7 @@ const boardSlice = createSlice({
         objective: string;
       }>
     ) => {
-      //console.log(action.payload);
+
 
       const board = state.boards.find(
         (board) => board.name === action.payload.boardName

@@ -1,9 +1,14 @@
 "use client";
 
 import { useReadActiveBoardState, useReadBoardSate } from "@/redux/hooks/hooks";
-import { Column, Task, moveTask, toggleSubTask } from "@/redux/slices/boardSlice";
-import { useEffect, useState } from "react";
-import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
+import {
+  Column,
+  Task,
+  moveTask,
+  toggleSubTask,
+} from "@/redux/slices/boardSlice";
+import { use, useEffect, useState } from "react";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "react-modal";
 import { useDispatch } from "react-redux";
 
@@ -15,44 +20,28 @@ const Board = () => {
   const activeBoardState = useReadBoardSate().boards.find(
     (board) => board.name === activeBoard
   );
-
-  console.log(activeBoardState);
-
-
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const openModal = (task: Task) => {
-    setSelectedTask(task);
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setSelectedTask(null);
-  };
-
-  const storeSubTasks = useReadBoardSate()
-    .boards.find((board) => board.name === activeBoard)
-    ?.columns.find((col) => col.name === selectedTask?.status.name)
-    ?.tasks.find((task) => task.name === selectedTask?.name)?.subTasks;
-
-  const [subTasks, setSubTasks] = useState(storeSubTasks);
+  const [activeBoardStateStore, setActiveBoardStateStore] =
+    useState(activeBoardState);
 
   useEffect(() => {
-    if (storeSubTasks) {
-      setSubTasks(storeSubTasks);
-    }
-  }, [storeSubTasks]);
+    setActiveBoardStateStore(activeBoardState);
+  }, [activeBoardState]);
 
-  const selectedTaskStatus = selectedTask?.status.name;
+  const [modalIsOpen, setIsOpen] = useState(false);
 
-  const [status, setStatus] = useState(selectedTaskStatus);
-  useEffect(()=> {
-    setStatus(selectedTaskStatus)
-  },[selectedTaskStatus])
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
+  const selectedTaskStore = useReadBoardSate()
+    .boards.find((board) => board.name === activeBoard)
+    ?.columns.find((col) => col.tasks.includes(selectedTask!))
+    ?.tasks.find((task) => task.name === selectedTask?.name);
 
+  const [selectedTaskStoreState, setSelectedTaskStoreState] =
+    useState(selectedTaskStore);
+
+  useEffect(() => {
+    setSelectedTaskStoreState(selectedTaskStore);
+  }, [selectedTaskStore]);
 
   return (
     <>
@@ -68,7 +57,10 @@ const Board = () => {
                   <div
                     key={i}
                     className="bg-secondary dark:bg-secondaryDark p-4 rounded-lg shadow-lg"
-                    onClick={() => openModal(task)}
+                    onClick={() => {
+                      setSelectedTask(task);
+                      setIsOpen(true);
+                    }}
                   >
                     <h1 className="text hover:text-action">{task.name}</h1>
                     <p className="textGray">
@@ -82,10 +74,9 @@ const Board = () => {
           ))}
         </div>
       )}
-
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={() => setIsOpen(false)}
         shouldFocusAfterRender={false}
         className="bg-secondary dark:bg-secondaryDark absolute top-[25%] left-[50%] transform translate-x-[-50%] w-[80%] max-w-[500px] p-0 rounded-md"
         style={{
@@ -95,70 +86,45 @@ const Board = () => {
         }}
       >
         <div className="flex flex-col p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-black dark:text-white text-2xl">
-              {selectedTask?.name}
+          <div className="flex items-center justify-between">
+            <h1 className="text-black dark:text-white text-2xl ">
+              {selectedTaskStoreState?.name}
             </h1>
             <BsThreeDotsVertical className="w-6 h-6 text-textGray" />
           </div>
-          <p className="textGray mb-4">{selectedTask?.description}</p>
-          <label className="label">
-            Subtasks (
-            {subTasks && subTasks.filter((task) => task.isCompleted).length} of{" "}
-            {subTasks?.length})
-          </label>
-          {subTasks &&
-            subTasks.map((subTask, i) => (
-              <div
-                key={i}
-                className="flex items-center bg-primary dark:bg-primaryDark my-2 p-4 rounded-lg"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  dispatch(
-                    toggleSubTask({
-                      boardName: activeBoard!,
-                      columnName: selectedTask!.status.name,
-                      taskName: selectedTask!.name,
-                      objective: storeSubTasks![i].objective,
-                    })
-                  );
-                }}
-              >
-                <input
-                  type="checkbox"
-                  className="peer hidden"
-                  checked={subTask.isCompleted}
-                  onChange={() => {}}
-                />
-                <span
-                  className="w-4 h-4 mr-2
-                border border-textGray rounded
-                peer-checked:bg-action
-                peer-checked:border"
-                ></span>
-                <p className="text peer-checked:line-through decoration-action decoration-2 w-full line-clamp-1">
-                  {subTask.objective}
-                </p>
-              </div>
-            ))}
-          <label className="label">Status</label>
-          <select
-            className="input text-black dark:text-white text-sm"
-            defaultValue={status}
-            onChange={(e) => {
-              // setStatus(e.target.value);
-              // dispatch(moveTask({
-              //   boardName: activeBoard!,
-              //   fromColumn: selectedTask!.status.name,
-              //   toColumn: e.target.value,
-              //   taskName: selectedTask!.name,
-              // }))
-            }}
-          >
-            {activeBoardState?.columns.map((col, i) => (
-              <option key={i}>{col.name}</option>
-            ))}
-          </select>
+          <p className="textGray my-4">{selectedTaskStoreState?.description}</p>
+          <p className="textGray font-bold">
+            {
+              selectedTaskStoreState?.subTasks.filter(
+                (subTask) => subTask.isCompleted
+              ).length
+            }{" "}
+            of {selectedTaskStoreState?.subTasks.length}
+          </p>
+          {selectedTaskStoreState?.subTasks.map((subTask, i) => (
+            <div
+              key={i}
+              className="flex items-center space-x-4 my-2 bg-primary dark:bg-primaryDark p-4 rounded-md"
+              onClick={() => {
+                setIsOpen(false);
+                dispatch(
+                  toggleSubTask({
+                    boardName: activeBoard!,
+                    columnName: selectedTaskStoreState!.status.name,
+                    taskName: selectedTaskStoreState!.name,
+                    objective: subTask.objective,
+                  })
+                );
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={subTask.isCompleted}
+                onChange={() => {}}
+              />
+              <p className="text">{subTask.objective}</p>
+            </div>
+          ))}
         </div>
       </Modal>
     </>

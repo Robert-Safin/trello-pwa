@@ -23,6 +23,9 @@ const Navbar = () => {
     useReadActiveBoardState().activeBoardName
   );
   const activeBoardName = useReadActiveBoardState().activeBoardName;
+  const activeBoardState = useReadBoardSate().boards.find(
+    (board) => board.name === activeBoardName
+  );
 
   useEffect(() => {
     setSelectedBoard(activeBoardName);
@@ -44,22 +47,26 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center">
-          <button
-            className="btn md:hidden"
-            onClick={() => {
-              dispatch(toggleAddTaskModal());
-            }}
-          >
-            +
-          </button>
-          <button
-            className="btn hidden md:block"
-            onClick={() => {
-              dispatch(toggleAddTaskModal());
-            }}
-          >
-            + Add New Task
-          </button>
+          {activeBoardName !== null && activeBoardState!.columns.length > 0 &&  (
+            <button
+              className="btn md:hidden"
+              onClick={() => {
+                dispatch(toggleAddTaskModal());
+              }}
+            >
+              +
+            </button>
+          )}
+          {activeBoardName !== null && activeBoardState!.columns.length > 0 &&  (
+            <button
+              className="btn hidden md:block"
+              onClick={() => {
+                dispatch(toggleAddTaskModal());
+              }}
+            >
+              + Add New Task
+            </button>
+          )}
           {useReadActiveBoardState().activeBoardName !== null && (
             <BsThreeDotsVertical
               className="w-8 h-8 text-textGray"
