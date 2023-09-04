@@ -152,6 +152,7 @@ const boardSlice = createSlice({
       }>
     ) => {
       // move task to another column
+      //console.log(action.payload);
 
       const board = state.boards.find(
         (board) => board.name === action.payload.boardName
@@ -216,6 +217,7 @@ const boardSlice = createSlice({
       }>
     ) => {
 
+      console.log(action.payload);
 
       const board = state.boards.find(
         (board) => board.name === action.payload.boardName

@@ -43,6 +43,8 @@ const Board = () => {
     setSelectedTaskStoreState(selectedTaskStore);
   }, [selectedTaskStore]);
 
+
+
   return (
     <>
       {activeBoard !== null && (
@@ -107,10 +109,14 @@ const Board = () => {
               className="flex items-center space-x-4 my-2 bg-primary dark:bg-primaryDark p-4 rounded-md"
               onClick={() => {
                 setIsOpen(false);
+                const currentColumnName = activeBoardStateStore!.columns.find(
+                  (col) => col.tasks.includes(selectedTask!)
+                )?.name;
+
                 dispatch(
                   toggleSubTask({
                     boardName: activeBoard!,
-                    columnName: selectedTaskStoreState!.status.name,
+                    columnName: currentColumnName!,
                     taskName: selectedTaskStoreState!.name,
                     objective: subTask.objective,
                   })
@@ -125,6 +131,33 @@ const Board = () => {
               <p className="text">{subTask.objective}</p>
             </div>
           ))}
+          <p className="textGray">Current Status</p>
+          <select
+            className="input"
+            value={
+              activeBoardStateStore?.columns.find((col) =>
+                col.tasks.includes(selectedTask!)
+              )?.name
+            }
+            onChange={(e) => {
+              setIsOpen(false);
+              const currentColumnName = activeBoardStateStore!.columns.find(
+                (col) => col.tasks.includes(selectedTask!)
+              )?.name;
+              dispatch(
+                moveTask({
+                  boardName: activeBoard!,
+                  columnName: currentColumnName!,
+                  taskName: selectedTaskStoreState!.name,
+                  newColumnName: e.target.value,
+                })
+              );
+            }}
+          >
+            {activeBoardStateStore?.columns.map((col, i) => (
+              <option key={i}>{col.name}</option>
+            ))}
+          </select>
         </div>
       </Modal>
     </>
