@@ -4,6 +4,7 @@ import { useReadActiveBoardState, useReadBoardSate } from "@/redux/hooks/hooks";
 import {
   Column,
   Task,
+  deleteTask,
   moveTask,
   toggleSubTask,
 } from "@/redux/slices/boardSlice";
@@ -43,7 +44,7 @@ const Board = () => {
     setSelectedTaskStoreState(selectedTaskStore);
   }, [selectedTaskStore]);
 
-
+  const [showOptions, setShowOptions] = useState(false);
 
   return (
     <>
@@ -92,7 +93,37 @@ const Board = () => {
             <h1 className="text-black dark:text-white text-2xl ">
               {selectedTaskStoreState?.name}
             </h1>
-            <BsThreeDotsVertical className="w-6 h-6 text-textGray" />
+            <BsThreeDotsVertical
+              className="w-6 h-6 text-textGray"
+              onClick={() => {
+                setShowOptions(true);
+                setTimeout(() => {
+                  setShowOptions(false);
+                }, 3000);
+              }}
+            />
+            {showOptions && (
+              <div className="absolute flex flex-col justify-evenly right-4 top-4 w-32 h-24 bg-primary dark:bg-primaryDark rounded-md p-4">
+                <p className="text-textGray mb-1">Edit Task</p>
+                <p
+                  onClick={() => {
+                    setIsOpen(false);
+                    dispatch(
+                      deleteTask({
+                        boardName: activeBoard!,
+                        columnName: activeBoardStateStore!.columns.find((col) =>
+                          col.tasks.includes(selectedTask!)
+                        )!.name,
+                        taskName: selectedTaskStoreState!.name,
+                      })
+                    );
+                  }}
+                  className="text-delete mb-1"
+                >
+                  Delete Task
+                </p>
+              </div>
+            )}
           </div>
           <p className="textGray my-4">{selectedTaskStoreState?.description}</p>
           <p className="textGray font-bold">

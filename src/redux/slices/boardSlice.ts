@@ -130,7 +130,21 @@ const boardSlice = createSlice({
         taskName: string;
       }>
     ) => {
-      // Your logic here to delete a task
+
+      const board = state.boards.find(
+        (board) => board.name === action.payload.boardName
+      );
+      if (board) {
+        const column = board.columns.find(
+          (col) => col.name === action.payload.columnName
+        );
+        if (column) {
+          column.tasks = column.tasks.filter(
+            (task) => task.name !== action.payload.taskName
+          );
+        }
+      }
+
     },
     updateTask: (
       state,
