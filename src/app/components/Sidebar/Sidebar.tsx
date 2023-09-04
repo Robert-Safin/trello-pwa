@@ -15,6 +15,7 @@ import { Column, addBoard, addColumn } from "@/redux/slices/boardSlice";
 import { RxCross2 } from "react-icons/rx";
 import { setActiveBoardName } from "@/redux/slices/activeBoardSlice";
 import { toggleHideSidebar } from "@/redux/slices/hideSidebarSlice";
+import { motion } from "framer-motion";
 Modal.setAppElement("#root");
 
 const Sidebar = () => {
@@ -61,9 +62,20 @@ const Sidebar = () => {
       <div className="hidden md:flex flex-col justify-between min-w-[300px] bg-secondary dark:bg-secondaryDark h-screen border-r dark:border-slate-700 drop-shadow-lg">
         <div>
           <div className="flex items-center p-4">
-            <TbBrandRedux className="w-10 h-10 text-action mr-2" />
+            <motion.div
+              animate={{
+                scale: [1, 1, 1, 1, 1],
+                rotate: [0, 0, 270, 270, 0],
+                borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+              }}
+              transition={{
+                duration: 2,
+              }}
+            >
+              <TbBrandRedux className="w-10 h-10 text-action mr-2" />
+            </motion.div>
             <h1 className="text-2xl font-bold tracking-widest dark:text-white">
-              To DO
+              Task Board
             </h1>
           </div>
 
@@ -123,12 +135,7 @@ const Sidebar = () => {
             }}
           >
             <BiHide className="w-6 h-6 text-textGray mr-2  hover:text-action" />
-            <p
-              className="text-textGray hover:text-action"
-
-            >
-              Hide Sidebar
-            </p>
+            <p className="text-textGray hover:text-action">Hide Sidebar</p>
           </div>
         </div>
       </div>
@@ -156,7 +163,7 @@ const Sidebar = () => {
               setBoardName(e.target.value);
             }}
           />
-          <label className="label">Board Columns</label>
+          {columns.length > 0 && <label className="label">Board Columns</label>}
 
           {columns.map((col, i) => (
             <div key={i} className="flex items-center">

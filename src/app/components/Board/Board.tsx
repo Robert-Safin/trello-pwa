@@ -2,19 +2,18 @@
 
 import { useReadActiveBoardState, useReadBoardSate } from "@/redux/hooks/hooks";
 import {
-  Column,
   Task,
   deleteTask,
   moveTask,
   toggleSubTask,
   updateTask,
 } from "@/redux/slices/boardSlice";
-import { use, useEffect, useState } from "react";
+import { MouseEventHandler, use, useEffect, useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import Modal from "react-modal";
 import { useDispatch } from "react-redux";
-
+import { motion } from "framer-motion"
 Modal.setAppElement("#root");
 
 const Board = () => {
@@ -55,10 +54,45 @@ const Board = () => {
     setEditState(selectedTask);
   }, [selectedTask]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [lastClientX, setLastClientX] = useState(0);
+  const [lastClientY, setLastClientY] = useState(0);
+
+  const onMouseDown = (e: any) => {
+    setIsDragging(true);
+    setLastClientX(e.clientX);
+    setLastClientY(e.clientY);
+  };
+
+  const onMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const onMouseMove = (e: any) => {
+    if (isDragging) {
+      const dx = e.clientX - lastClientX;
+      const dy = e.clientY - lastClientY;
+      setLastClientX(e.clientX);
+      setLastClientY(e.clientY);
+
+      containerRef.current!.scrollLeft -= dx;
+      containerRef.current!.scrollTop -= dy;
+    }
+  };
+
   return (
     <>
       {activeBoard !== null && (
-        <div className="flex overflow-x-auto h-[calc(100vh-70px)] p-8 space-x-16">
+
+
+        <div
+          className="flex overflow-x-auto h-[calc(100vh-80px)] p-8 space-x-16"
+          ref={containerRef}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+          onMouseMove={onMouseMove}
+        >
           {activeBoardState?.columns.map((col, i) => (
             <div key={i} className="min-w-[350px]">
               <h1 className="headerGray mb-4 uppercase">
@@ -66,9 +100,15 @@ const Board = () => {
               </h1>
               <div className="flex flex-col space-y-4">
                 {col.tasks.map((task, i) => (
-                  <div
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+
+
                     key={i}
-                    className="bg-secondary dark:bg-secondaryDark p-4 rounded-lg shadow-lg"
+                    className="bg-secondary dark:bg-secondaryDark p-4 rounded-lg shadow-lg hover:shadow-action"
                     onClick={() => {
                       setSelectedTask(task);
                       setIsOpen(true);
@@ -79,12 +119,13 @@ const Board = () => {
                       {task.subTasks.filter((task) => task.isCompleted).length}{" "}
                       of {task.subTasks.length} subtasks
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
           ))}
         </div>
+
       )}
       {showEditTask === false && (
         <Modal
@@ -146,12 +187,12 @@ const Board = () => {
               {selectedTaskStoreState?.description}
             </p>
             <p className="textGray font-bold">
-              {
+           Subtasks ({
                 selectedTaskStoreState?.subTasks.filter(
                   (subTask) => subTask.isCompleted
                 ).length
               }{" "}
-              of {selectedTaskStoreState?.subTasks.length}
+              of {selectedTaskStoreState?.subTasks.length})
             </p>
             {selectedTaskStoreState?.subTasks.map((subTask, i) => (
               <div
@@ -183,7 +224,7 @@ const Board = () => {
             ))}
             <p className="textGray">Current Status</p>
             <select
-              className="input"
+              className="input text-black dark:text-white text-sm p-3"
               value={
                 activeBoardStateStore?.columns.find((col) =>
                   col.tasks.includes(selectedTask!)
@@ -274,7 +315,7 @@ const Board = () => {
             </div>
           ))}
           <button
-            className="btnWhite mt-4 mb-4"
+            className="btnWhite mt-8 mb-4"
             onClick={() => {
               setEditState({
                 ...editState!,
@@ -291,7 +332,7 @@ const Board = () => {
             className="btn"
             onClick={() => {
               setShowEditTask(false);
-              setIsOpen(false)
+              setIsOpen(false);
               dispatch(
                 updateTask({
                   boardName: activeBoard!,

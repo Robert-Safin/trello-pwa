@@ -40,8 +40,8 @@ const ThemeButton = () => {
         onChange={toggleTheme}
         uncheckedIcon={false}
         checkedIcon={false}
-        offColor="#701b95"
-        onColor="#701b95"
+        offColor="#7942b1"
+        onColor="#7942b1"
         handleDiameter={20}
       />
       <BsFillSunFill className="text-textGray w-5 h-5" />

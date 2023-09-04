@@ -136,7 +136,7 @@ const EditBoardModal = () => {
         ))}
 
         <button
-          className="btnWhite mt-4"
+          className="btnWhite mt-8"
           onClick={() => {
             setColumns([
               ...columns,

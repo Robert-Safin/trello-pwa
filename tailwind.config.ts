@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        action: 'rgb(95, 55, 176)',
+        action: 'rgb(111, 75, 183)',
         delete: '#e53e3e',
         primary: 'rgb(242,243,251)',
         secondary: 'rgb(255,255,255)',
